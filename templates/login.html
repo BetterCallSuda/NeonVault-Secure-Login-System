@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4 col-md-6 mx-auto">
+  <h2 class="neon text-center">Login</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.email(class="form-control mb-3") }}
+    {{ form.password(class="form-control mb-3") }}
+    {{ form.submit(class="btn btn-info w-100") }}
+  </form>
+</div>
+{% endblock %}
