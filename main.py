@@ -20,3 +20,32 @@ login_manager.login_view = "login"
 with app.app_context():
     db.create_all()
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+        hashed_pw = generate_password_hash(form.password.data)
+
+        new_user = User(
+            name=form.name.data,
+            email=form.email.data,
+            password=hashed_pw
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        login_user(new_user)
+        return redirect(url_for("dashboard"))
+
+    return render_template("register.html", form=form)
+
